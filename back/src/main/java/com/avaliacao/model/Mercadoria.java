@@ -41,10 +41,6 @@ public class Mercadoria {
     @Column(nullable = false, updatable = false)
     private LocalDate dataCadastro;
 
-    @NotNull(message = "A data de validade é obrigatória")
-    @Column(nullable = false)
-    private LocalDate dataValidade;
-
     @NotNull(message = "A quantidade é obrigatória")
     @Min(value = 0, message = "A quantidade não pode ser negativa")
     @Column(nullable = false)
@@ -103,14 +99,6 @@ public class Mercadoria {
 
     public LocalDate getDataCadastro() {
         return dataCadastro;
-    }
-
-    public LocalDate getDataValidade() {
-        return dataValidade;
-    }
-
-    public void setDataValidade(LocalDate dataValidade) {
-        this.dataValidade = dataValidade;
     }
 
     public Integer getQuantidade() {

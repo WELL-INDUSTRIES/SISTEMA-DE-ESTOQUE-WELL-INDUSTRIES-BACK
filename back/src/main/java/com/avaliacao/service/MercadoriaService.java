@@ -65,7 +65,6 @@ public class MercadoriaService {
         mercadoria.setCategoria(dto.getCategoria());
         mercadoria.setPreco(dto.getPreco());
         mercadoria.setQuantidade(dto.getQuantidade());
-        mercadoria.setDataValidade(dto.getDataValidade());
         mercadoria.setFornecedor(fornecedor);
     }
 

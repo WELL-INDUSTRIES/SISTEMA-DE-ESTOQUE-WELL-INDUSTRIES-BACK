@@ -18,9 +18,6 @@ public class MercadoriaRequestDTO {
     @NotNull(message = "O preço é obrigatório")
     private Double preco;
 
-    @NotNull(message = "A data de validade é obrigatória")
-    private LocalDate dataValidade;
-
     @NotNull(message = "A quantidade é obrigatória")
     @Min(value = 0, message = "A quantidade não pode ser negativa")
     private Integer quantidade;
@@ -58,14 +55,6 @@ public class MercadoriaRequestDTO {
 
     public void setPreco(Double preco) {
         this.preco = preco;
-    }
-
-    public LocalDate getDataValidade() {
-        return dataValidade;
-    }
-
-    public void setDataValidade(LocalDate dataValidade) {
-        this.dataValidade = dataValidade;
     }
 
     public Integer getQuantidade() {
