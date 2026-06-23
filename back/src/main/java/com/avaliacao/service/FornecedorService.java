@@ -1,12 +1,13 @@
 package com.avaliacao.service;
 
 import com.avaliacao.dto.FornecedorRequestDTO;
-import com.avaliacao.exception.ConflitoException;
 import com.avaliacao.exception.RecursoNaoEncontradoException;
 import com.avaliacao.model.Fornecedor;
 import com.avaliacao.model.Mercadoria;
 import com.avaliacao.repository.FornecedorRepository;
 import com.avaliacao.repository.MercadoriaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +35,13 @@ public class FornecedorService {
     }
 
     @Transactional(readOnly = true)
-    public List<Fornecedor> listarTodos() {
-        return fornecedorRepository.findAll();
+    public Page<Fornecedor> listarTodos(Pageable pageable) {
+        return fornecedorRepository.findByAtivoTrue(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Fornecedor> listarInativos(Pageable pageable) {
+        return fornecedorRepository.findByAtivoFalse(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -54,14 +60,15 @@ public class FornecedorService {
     @Transactional
     public void deletar(Long id) {
         Fornecedor fornecedor = buscarPorId(id);
+        fornecedor.setAtivo(false);
+        fornecedorRepository.save(fornecedor);
+    }
 
-        if (mercadoriaRepository.existsByFornecedorId(id)) {
-            throw new ConflitoException(
-                    "Não é possível excluir fornecedor com mercadorias vinculadas"
-            );
-        }
-
-        fornecedorRepository.delete(fornecedor);
+    @Transactional
+    public Fornecedor reativar(Long id) {
+        Fornecedor fornecedor = buscarPorId(id);
+        fornecedor.setAtivo(true);
+        return fornecedorRepository.save(fornecedor);
     }
 
     /**

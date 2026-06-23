@@ -1,5 +1,6 @@
 package com.avaliacao.service;
 
+import com.avaliacao.dto.MercadoriaQuantidadeDTO;
 import com.avaliacao.dto.MercadoriaRequestDTO;
 import com.avaliacao.exception.RecursoNaoEncontradoException;
 import com.avaliacao.exception.RegraNegocioException;
@@ -7,10 +8,10 @@ import com.avaliacao.model.Fornecedor;
 import com.avaliacao.model.Mercadoria;
 import com.avaliacao.repository.FornecedorRepository;
 import com.avaliacao.repository.MercadoriaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class MercadoriaService {
@@ -35,8 +36,13 @@ public class MercadoriaService {
     }
 
     @Transactional(readOnly = true)
-    public List<Mercadoria> listarTodosComEstoque() {
-        return mercadoriaRepository.findByQuantidadeGreaterThan(0);
+    public Page<Mercadoria> listarTodosComEstoque(Pageable pageable) {
+        return mercadoriaRepository.findByAtivoTrueAndQuantidadeGreaterThan(0, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Mercadoria> listarInativos(Pageable pageable) {
+        return mercadoriaRepository.findByAtivoFalse(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -54,9 +60,26 @@ public class MercadoriaService {
     }
 
     @Transactional
+    public void atualizarQuantidade(Long id, MercadoriaQuantidadeDTO dto) {
+        int atualizadas = mercadoriaRepository.atualizarQuantidade(id, dto.getQuantidade());
+
+        if (atualizadas == 0) {
+            throw new RecursoNaoEncontradoException("Mercadoria não encontrada");
+        }
+    }
+
+    @Transactional
     public void deletar(Long id) {
         Mercadoria mercadoria = buscarPorId(id);
-        mercadoriaRepository.delete(mercadoria);
+        mercadoria.setAtivo(false);
+        mercadoriaRepository.save(mercadoria);
+    }
+
+    @Transactional
+    public Mercadoria reativar(Long id) {
+        Mercadoria mercadoria = buscarPorId(id);
+        mercadoria.setAtivo(true);
+        return mercadoriaRepository.save(mercadoria);
     }
 
     private void preencherMercadoria(Mercadoria mercadoria, MercadoriaRequestDTO dto, Fornecedor fornecedor) {

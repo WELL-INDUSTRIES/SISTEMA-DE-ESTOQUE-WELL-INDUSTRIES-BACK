@@ -51,6 +51,9 @@ public class Mercadoria {
     @JoinColumn(name = "fornecedor_id", nullable = false)
     private Fornecedor fornecedor;
 
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
     public Mercadoria() {
     }
 
@@ -115,5 +118,13 @@ public class Mercadoria {
 
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }
