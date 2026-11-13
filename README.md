@@ -1,6 +1,8 @@
-# TechStock | API de estoque
+# TechStock | API REST do CRUD de estoque
 
 API REST da WELL-INDUSTRIES para gerenciar fornecedores e mercadorias de um estoque de eletrônicos. O projeto usa Java 21, Spring Boot 3.2.1, Spring Data JPA e PostgreSQL. A [interface Angular](https://github.com/WELL-INDUSTRIES/PROJETO-JAVA-SISTEMA-DE-ESTOQUE-FRONT) consome esses recursos.
+
+O CRUD permite criar, consultar, atualizar e desativar registros. A exclusão é lógica e a API oferece rotas de reativação.
 
 ## Executar localmente
 
